@@ -13,3 +13,22 @@ public class ExampleController {
     }
 }
 ```
+
+## Test
+```java
+@SpringBootTest
+@AutoConfigureMockMvc
+class ExampleAfterControllerTest {
+
+    @Autowired
+    MockMvc mvc;
+
+    @Test
+    void _400_bad_request() throws Exception {
+        mvc.perform(get("/example/after"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("reason").value("test"))
+                .andExpect(jsonPath("httpCode").value(400));
+    }
+}
+```
