@@ -14,12 +14,17 @@ class ExceptorProcessor {
     @Around("@within(Exceptor)")
     public Object handleException(ProceedingJoinPoint joinPoint) throws Throwable {
         Exceptor exceptionAnnotation = getExceptorAnnotation(joinPoint);
+        Class<? extends Throwable> exception = exceptionAnnotation.exception();
 
         try {
             return joinPoint.proceed();
         } catch (Exception e) {
-            ErrorResponse responseBody = ErrorResponse.with(exceptionAnnotation.status().value(), e.getMessage());
-            return ResponseEntity.status(exceptionAnnotation.status()).body(responseBody);
+            if (exception.isInstance(e)) {
+                ErrorResponse responseBody = ErrorResponse.with(exceptionAnnotation.status().value(), e.getMessage());
+                return ResponseEntity.status(exceptionAnnotation.status()).body(responseBody);
+            } else {
+                throw e;
+            }
         }
     }
 
