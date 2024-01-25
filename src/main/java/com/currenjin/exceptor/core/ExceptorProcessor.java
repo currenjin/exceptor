@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-class ExceptorProcessor {
+public class ExceptorProcessor {
     @Around("@within(Exceptor)")
     public Object handleException(ProceedingJoinPoint joinPoint) throws Throwable {
         Exceptor exceptionAnnotation = getExceptorAnnotation(joinPoint);
